@@ -1,0 +1,10 @@
+ {
+    "name": "Doogle",
+    "description" : "Search David's Internet History",
+    "version": "0.1",
+    "manifest_version": 2,
+    "browser_action": {
+      "default_popup": "history.html",
+      "default_icon": "hello_extensions.png"
+    }
+  }
