@@ -1,15 +1,12 @@
 {
-  "name": "CLD",
-  "description": "Displays the language of a tab",
-  "version": "0.3",
+  "name": "David's History",
+  "description": "Record's David's Internet History for Future Searching",
+  "version": "0.4",
   "background": {
     "scripts": ["background.js"]
   },
   "permissions": [
     "tabs"
   ],
-  "browser_action": {
-      "default_name": "Page Language"
-  },
   "manifest_version": 2
 }
