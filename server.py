@@ -1,5 +1,12 @@
 from flask import Flask, request
 app = Flask(__name__)
+
+response_headers = {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8', 
+        'Access-Control-Allow-Origin': '*', 
+        'Access-Control-Allow-Methods': 'POST,GET'
+        }
+
     
 @app.route('/', methods=['POST', 'GET'])
 def result():
@@ -12,7 +19,7 @@ def result():
         with open("data.txt", "ab") as f:
             f.write(data)
             f.write(b"\n")
-        return "blank", 200,{'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+        return "blank", 200, response_headers
     else:
         print("ERROR: UNKOWN REQUEST METHOD")
         return "MERP"
