@@ -2,8 +2,14 @@ from bs4 import BeautifulSoup
 import requests
 import string
 
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-page = requests.get('https://blog.ycombinator.com/13-companies-from-yc-winter-2018/', headers=headers)
+
+def make_request(url):
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    request = requests.get(url, headers=headers)
+    if request.status_code == 200:
+        return request.content
+    else:
+        return None
 
 def clean_request(html):
     """
@@ -19,21 +25,28 @@ def clean_request(html):
 
 def create_word_tokens(text):
     """
-    Removes punctuation and converts to ASCII
+    Removes punctuation, digits, and converts to ASCII
     text: Unicode text of parsed html page
     return: List of word tokens (ByteStrings)
     """
-    word_list = text.split(" ")
+    word_list = text.split()
 
     translator = str.maketrans('','',string.punctuation)
     filtered_punctuation = map(lambda word: word.translate(translator), word_list)
     mapped_lowercase     = map(lambda word: word.lower(), filtered_punctuation)
     map_ascii            = map(lambda word: word.encode('ascii', 'ignore'), mapped_lowercase)
     drop_empties         = filter(lambda word: word, map_ascii)
+    drop_digits          = filter(lambda word: not word.isdigit(), drop_empties)
     
-    l = list(drop_empties)
-    return l
+    to_list = list(drop_digits)
+    return to_list
 
-cleaned = clean_request(page.content)
-parsed = create_word_tokens(cleaned)
-print(parsed)
+if __name__ == "__main__":
+    url = "https://docs.python.org/dev/library/sys.html#sys.getsizeof"
+    request = make_request(url)
+    cleaned = clean_request(request)
+    parsed = create_word_tokens(cleaned)
+    print(parsed)
+    
+    import sys
+    print(sys.getsizeof(str(parsed)))
