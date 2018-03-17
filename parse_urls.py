@@ -18,9 +18,15 @@ def clean_request(html):
  }   return: string
     """
     soup = BeautifulSoup(html, "html.parser")
+
+    try:
+        title = soup.title.string.strip()
+    except AttributeError: # Website doesn't have a title or has empty title
+        title = ""
+
     for s in soup(['script', 'style']):
         s.decompose()
-    return ' '.join(soup.stripped_strings)
+    return title, ' '.join(soup.stripped_strings)
 
 
 def create_word_tokens(text):
@@ -42,11 +48,12 @@ def create_word_tokens(text):
     return to_list
 
 if __name__ == "__main__":
-    url = "https://docs.python.org/dev/library/sys.html#sys.getsizeof"
+    url = b"https://www.youtube.com/watch?v=LiX-CsHOEh4"
     request = make_request(url)
-    cleaned = clean_request(request)
+    title, cleaned = clean_request(request)
     parsed = create_word_tokens(cleaned)
-    print(parsed)
+    print("Title:", title)
+    print("Parsed:",parsed)
     
     import sys
     print(sys.getsizeof(str(parsed)))
