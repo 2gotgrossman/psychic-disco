@@ -1,4 +1,5 @@
 from flask import Flask, request
+import sqlite3
 app = Flask(__name__)
 
 response_headers = {
@@ -16,9 +17,15 @@ def result():
     elif request.method == 'POST':
         data = request.get_data()
         print("DATA:", data)
-        with open("data.txt", "ab") as f:
-            f.write(data)
-            f.write(b"\n")
+        
+        conn = sqlite3.connect('history.sqlite')
+        with conn as cursor:
+            cursor.execute("INSERT OR IGNORE INTO {tn} VALUES (?)".\
+                format(tn='to_process_urls'), (data,))
+
+#        with open("data.txt", "ab") as f:
+#            f.write(data)
+#            f.write(b"\n")
         return "blank", 200, response_headers
     else:
         print("ERROR: UNKOWN REQUEST METHOD")
