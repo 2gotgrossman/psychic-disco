@@ -48,7 +48,7 @@ def create_word_tokens(text):
     return to_list
 
 if __name__ == "__main__":
-    url = b"https://www.youtube.com/watch?v=LiX-CsHOEh4"
+    url = b"http://carrot.is/coding/nginx_introduction"
     request = make_request(url)
     title, cleaned = clean_request(request)
     parsed = create_word_tokens(cleaned)
